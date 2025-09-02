@@ -1,6 +1,11 @@
 [package]
 name = "hayai-playout-gtk"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
 
 [dependencies]
+hayai-playout-core = { path = "../hayai-playout-core" }
+gstreamer = { workspace = true }
+glib = { workspace = true }
+gtk4 = { workspace = true }
+anyhow = { workspace = true }
