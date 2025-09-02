@@ -1,4 +1,4 @@
-use hayai_playout_core::Streamer;
+use hayai_playout_core::{EncodingSettings, Streamer}; // Add EncodingSettings here
 use anyhow::Result;
 use std::thread;
 use std::time::Duration;
@@ -10,8 +10,7 @@ fn test_new_streamer_is_empty() {
     assert!(streamer.get_currently_playing_id().is_none());
 }
 
-#[test]
-fn test_add_items() {
+#[test]fn test_add_items() {
     let streamer = Streamer::new().unwrap();
     streamer.add_item("A");
     streamer.add_item("B");
@@ -32,7 +31,6 @@ fn test_remove_item() {
 
     let playlist_before = streamer.get_playlist_clone();
     let id_to_remove = playlist_before.iter().find(|item| item.uri == "B").unwrap().id;
-
     streamer.remove_item(id_to_remove);
 
     let playlist_after = streamer.get_playlist_clone();
@@ -45,9 +43,7 @@ fn test_remove_item() {
 fn test_remove_nonexistent_item() {
     let streamer = Streamer::new().unwrap();
     streamer.add_item("A");
-    
     streamer.remove_item(99999);
-
     assert_eq!(streamer.get_playlist_clone().len(), 1);
 }
 
@@ -60,7 +56,6 @@ fn test_move_item() -> Result<()> {
 
     let playlist_before = streamer.get_playlist_clone();
     let id_to_move = playlist_before.iter().find(|item| item.uri == "C").unwrap().id;
-
     streamer.move_item(id_to_move, 0)?;
 
     let playlist_after = streamer.get_playlist_clone();
@@ -83,6 +78,7 @@ fn test_move_item_out_of_bounds() {
 }
 
 
+// --- THIS IS THE FIXED TEST ---
 #[test]
 #[ignore]
 fn test_start_stop_lifecycle() -> Result<()> {
@@ -98,7 +94,11 @@ fn test_start_stop_lifecycle() -> Result<()> {
 
     let rtmp_url = "rtmp://localhost/live/test";
     
-    streamer.start(rtmp_url)?;
+    // Create default settings to pass to the start function.
+    let settings = EncodingSettings::default();
+    
+    // Pass the new `settings` argument.
+    streamer.start(rtmp_url, &settings)?;
     
     thread::sleep(Duration::from_millis(500));
     

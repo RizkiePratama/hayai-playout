@@ -1,6 +1,13 @@
 [workspace]
-resolver = "2"
 members = [
     "hayai-playout-core",
     "hayai-playout-gtk",
 ]
+resolver = "2"
+
+[workspace.dependencies]
+gstreamer = "0.24"
+glib = "0.21"
+gtk4 = "0.8"
+anyhow = "1.0"
+serde = { version = "1.0", features = ["derive"] }
